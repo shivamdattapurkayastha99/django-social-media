@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block body %}
+<!-- <div class="container my-4 mx-4">
+    {% for i in object_list %}
+    <div class="card">
+        <div class="card-body">
+          This is some text within a card body.
+        </div>
+      </div>
+      {% endfor %}
+</div> -->
+<div class="container my-4 mx-4">
+
+    {% if not object_list %}
+    <h1>No Search Results</h1>
+
+    {% else %}
+        {% for i in object_list %}
+            <div class="card my-2">
+                <div class="card-body">
+                    <h2>{{i.username}}</h2>
+                    <a type="button" name="button" class="btn btn-primary" role="button" href="{% url 'userpage:user_profile' i.username  %}" >View</a>
+                </div>
+            </div>
+        {% endfor %}
+    {% endif %}
+{% endblock %}

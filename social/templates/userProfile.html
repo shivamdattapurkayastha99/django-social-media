@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% load static %} 
+{% block body %}
+<div class="container my-4">
+    <div class="media">
+        <img src="{{userImage.url}}" class="align-self-start-mr-3 userImage" width="200px" height="200px" alt="">
+        <div class="media-body-info">
+            <h4 class="mt-0">{{user_obj.username}}
+                <a type="button" class="btn btn-outline-primary" id="follow" role="button" href="#">Follow</a>
+                
+            </h4>
+            <p>Follower :{{follower}} Following:{{following}}</p>
+            <p><b>{{bio}}</b></p>
+        </div>
+    </div>
+    <hr>
+    <div class="row">
+        {% for i in posts %}
+        
+            {% for j in i %}
+            <div class="col-md-4">
+            <img src="{{j.image.url}}" class="card my-2" width="150" height="150" alt="">
+        </div>
+
+            {% endfor %}
+        
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block body %}
+{% for i in posts %}
+<div class="container my-4">
+<div class="card">
+    <h5 class="card-header"><a href="{% url 'userprofile' i.user %}">{{i.user}}</a> &nbsp;{{i.date.date}}</h5>
+    <div class="card-body">
+      <h5 class="card-title">{{i.captions}}</h5>
+      <p class="card-text"><img src="{{i.image.url}}" width="100px" height="100px" alt=""></p>
+      <hr>
+      <a href="{% url 'likepost'  %}" class="btn btn-primary mx-2 like" style="color: white;" id="{{i.id}}">Like</a>
+      <a href="{% url 'comment'  %}" class="btn btn-warning mx-2">Comment</a>
+      <a href="#" class="btn btn-danger mx-2">Share</a>
+      {% if i.user == request.user %}
+      <a href="{% url 'delPost' i.id %}" class="btn btn-danger mx-2">Delete</a>
+      {% endif %}
+      <!-- <a href="#" class="btn btn-info mx-2">Write a Post</a> -->
+      <button type="button" class="btn btn-info" data-toggle="modal" data-target="#postModal">
+        Write a Post
+      </button>
+    </div>
+  </div>
+  {% endfor %}
+  <!-- Button trigger modal -->
+
+
+<!-- Modal -->
+<div class="modal fade" id="postModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Write something</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form method="POST" action="/userpage/post" enctype="multipart/form-data">{% csrf_token %}
+          <div class="form-group">
+            <label for="captions">Write</label>
+            <input type="text" class="form-control" id="captions" name="captions">
+            
+          </div>
+          <div class="form-group">
+            <label for="image">Upload a Photo</label>
+            <input type="file" class="form-control" id="image" name="image">
+          </div>
+          
+          <button type="submit" class="btn btn-primary">Post</button>
+        </form>
+      </div>
+      
+    </div>
+  </div>
+</div>
+</div>
+{% endblock %}
+
+{% block js %}
+<script>
+  $(".like").click(function (e) {
+    var id = this.id; //$(this).attr('id');
+    var href = $('.like').find('a').attr('href');
+    e.preventDefault(); // don't follow the link
+
+    $.ajax({
+        url: href,
+        data: {
+          'likeId': id
+        },
+        success: function(response){
+          if(response.liked){
+            $('#likebtn' + id).html("Liked");
+          }
+          else{
+            $('#likebtn' + id).html("Like");
+          }
+        }
+      })
+});
+</script>
+{% endblock %}
+
+
